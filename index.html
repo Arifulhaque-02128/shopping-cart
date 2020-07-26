@@ -65,8 +65,8 @@
 
                      <div class="col-md-4 status">
                         <h5>$ <span id="subtotal">1278</span></h5>
-                        <h5>$ <span id="tax">7</span></h5>
-                        <h5>$ <span id="total">1285</span></h5>
+                        <h5><span id="tax">5%</span></h5>
+                        <h5>$ <span id="total">1342</span></h5>
                      </div>
                   </div>
                </div>
@@ -81,76 +81,152 @@
 
    <script>
 
+     
+      function productAmount(isPlus, idForQuantityField, idForPriceField){
+         const productQuantity = document.getElementById(idForQuantityField);
+         const productQuantityInNumber = parseInt(productQuantity.value);
 
-      function AmountOfProduct(id,calcFactor){
-         const field = document.getElementById(id);
-         const currentAmount = parseInt(field.value);
-         const totalAmount = currentAmount + calcFactor;
-         field.value = totalAmount;
+         if (isPlus == true) {
+            let  newProductQuantity = productQuantityInNumber + 1;
+            productQuantity.value = newProductQuantity;
+            productPrice(idForPriceField, newProductQuantity);
+         }
+         else if (isPlus == false && productQuantityInNumber > 0) {
+            let newProductQuantity = productQuantityInNumber - 1;
+            productQuantity.value = newProductQuantity;
+            productPrice(idForPriceField, newProductQuantity);
+         }
+      }  
+
+      function productPrice(idForPriceField, quantity){
+         const priceForProduct = document.getElementById(idForPriceField);
+         const priceForProductInNumber = parseInt(priceForProduct.innerText);
+
+         if (idForPriceField == "priceForPhone") {
+            const newPriceForProduct = quantity*1219;
+            priceForProduct.innerText = newPriceForProduct; 
+         } 
+         else if (idForPriceField == "priceForCase"){
+            const newPriceForProduct = quantity*59;
+            priceForProduct.innerText = newPriceForProduct;
+         }
+      }
+      function total(){
+         const phnPrice = parseInt(document.getElementById("priceForPhone").innerText);
+         const casePrice = parseInt(document.getElementById("priceForCase").innerText);
+
+         const subTotal = document.getElementById("subtotal");
+         const newSubTotal = phnPrice + casePrice;
+         subTotal.innerText = newSubTotal; 
+
+         const tax = document.getElementById("tax");
+         const totalTax = (5/100)*newSubTotal;
+         tax.innerText = "5% = $ " + totalTax.toFixed(1);
+
+         const total = document.getElementById("total");
+         const totalPrice = Math.round(totalTax + newSubTotal);
+         total.innerText = totalPrice;
+
       }
 
-      function productPrice(id, calcFactor){
-         const priceForProduct = document.getElementById(id);
-         const currentPrice = parseFloat(priceForProduct.innerText);
-         const totalPrice = currentPrice + calcFactor;
-         priceForProduct.innerText = totalPrice;
-      }
-
-      function total(id){
-         const tax = parseFloat(document.getElementById("tax").innerText);
-         const subTotal = parseFloat(document.getElementById("subtotal").innerText);
-         const currentFinalPrice = document.getElementById(id);
-         const finalPrice = tax + subTotal;
-         currentFinalPrice.innerText = finalPrice;
-
-
-      }
-
-
-         // javascript for phone 
-      const plusBtnForPhone = document.getElementById("plusBtn");
-      plusBtnForPhone.addEventListener("click", function(){
-
-         AmountOfProduct("phoneField", 1);
-         productPrice("priceForPhone", 1219);
-         productPrice("subtotal", 1219);
-         total("total");
-         
-
-         
+      const plusBtnForPhn = document.getElementById("plusBtn");
+      plusBtnForPhn.addEventListener("click", function(){
+         productAmount(true, "phoneField", "priceForPhone");
+         total();
       });
 
-      const minusBtnForPhone = document.getElementById("minusBtn");
-      minusBtnForPhone.addEventListener("click", function(){
-
-         AmountOfProduct("phoneField", -1);
-         productPrice("priceForPhone", -1219);
-         productPrice("subtotal", -1219);
-         total("total");
-
-
+      const minusBtnForPhn = document.getElementById("minusBtn");
+      minusBtnForPhn.addEventListener("click", function(){
+         productAmount(false, "phoneField", "priceForPhone");
+         total();
       });
 
-         // javascript for phoneCase
       const plusBtnForCase = document.getElementById("plusBtn2");
       plusBtnForCase.addEventListener("click", function(){
-
-         AmountOfProduct("caseField", 1);
-         productPrice("priceForCase", 59);
-         productPrice("subtotal", 59);
-         total("total");
-
+         productAmount(true, "caseField", "priceForCase");
+         total();
       });
 
       const minusBtnForCase = document.getElementById("minusBtn2");
       minusBtnForCase.addEventListener("click", function(){
-
-         AmountOfProduct("caseField", -1);
-         productPrice("priceForCase", -59);
-         productPrice("subtotal", -59);
-         total("total");
-
+         productAmount(false, "caseField", "priceForCase");
+         total();
       });
+
+ 
+
+
+
+
+      // function AmountOfProduct(id,calcFactor){
+      //    const field = document.getElementById(id);
+      //    const currentAmount = parseInt(field.value);
+      //    const totalAmount = currentAmount + calcFactor;
+      //    field.value = totalAmount;
+      // }
+
+      // function productPrice(id, calcFactor){
+      //    const priceForProduct = document.getElementById(id);
+      //    const currentPrice = parseFloat(priceForProduct.innerText);
+      //    const totalPrice = currentPrice + calcFactor;
+      //    priceForProduct.innerText = totalPrice;
+      // }
+
+      // function total(id){
+      //    const tax = parseFloat(document.getElementById("tax").innerText);
+      //    const subTotal = parseFloat(document.getElementById("subtotal").innerText);
+      //    const currentFinalPrice = document.getElementById(id);
+      //    const finalPrice = tax + subTotal;
+      //    currentFinalPrice.innerText = finalPrice;
+
+
+      // }
+
+
+      //    // javascript for phone 
+      // const plusBtnForPhone = document.getElementById("plusBtn");
+      // plusBtnForPhone.addEventListener("click", function(){
+
+      //    AmountOfProduct("phoneField", 1);
+      //    productPrice("priceForPhone", 1219);
+      //    productPrice("subtotal", 1219);
+      //    total("total");
+         
+
+         
+      // });
+
+      // const minusBtnForPhone = document.getElementById("minusBtn");
+      // minusBtnForPhone.addEventListener("click", function(){
+
+      //    AmountOfProduct("phoneField", -1);
+      //    productPrice("priceForPhone", -1219);
+      //    productPrice("subtotal", -1219);
+      //    total("total");
+
+
+      // });
+
+      //    // javascript for phoneCase
+      // const plusBtnForCase = document.getElementById("plusBtn2");
+      // plusBtnForCase.addEventListener("click", function(){
+
+      //    AmountOfProduct("caseField", 1);
+      //    productPrice("priceForCase", 59);
+      //    productPrice("subtotal", 59);
+      //    total("total");
+
+      // });
+
+      // const minusBtnForCase = document.getElementById("minusBtn2");
+      // minusBtnForCase.addEventListener("click", function(){
+
+      //    AmountOfProduct("caseField", -1);
+      //    productPrice("priceForCase", -59);
+      //    productPrice("subtotal", -59);
+      //    total("total");
+
+      // });
 
    </script>
 
